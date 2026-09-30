@@ -322,9 +322,18 @@ describe("docs honesty lines (DC1/DC2/DC4/DC8/DC10/DC11/DC13)", () => {
       readFileSync(join(root, "package.json"), "utf8")
     ) as Record<string, unknown>;
     expect(pkg.private).toBe(true);
-    expect(pkg.repository).toBeUndefined();
-    expect(pkg.homepage).toBeUndefined();
+    expect(pkg.repository).toEqual({
+      type: "git",
+      url: "git+https://github.com/yellowgram/recv-approval-watch.git",
+    });
+    expect(pkg.homepage).toBe("https://www.yellowgram.dev/oss");
+    expect(pkg.bugs).toEqual({
+      url: "https://github.com/yellowgram/recv-approval-watch/issues",
+    });
     expect(pkg.prepublishOnly).toBeUndefined();
+    expect(
+      (pkg.scripts as Record<string, unknown> | undefined)?.prepublishOnly
+    ).toBeUndefined();
     expect(PACKAGE_VERSION).toBe("0.1.0");
   });
 });

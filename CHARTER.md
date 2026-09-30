@@ -1,9 +1,9 @@
 # recv-approval-watch — charter fences
 
-**Status:** LOCAL_SCAFFOLD · private · LaunchGate-before-expansion  
+**Status:** public GitHub · not on npm · LaunchGate-before-expansion  
 **As of:** 2026-09-30 (ET)
 
-This package is a **narrow** receive-side watcher. Keep the surface honest. No public remote / npm until founder + LaunchGate.
+This package is a **narrow** receive-side watcher. Keep the surface honest. Public GitHub source is OK. No npm publish and no Polar until founder + LaunchGate.
 
 ## Job (P0)
 
@@ -31,7 +31,7 @@ recv-ingest → … → recv-approval-watch → recv-permit2-watch(stub) → rec
 - Optional revoke-intent **payload emitter** — never holds keys, never broadcasts revoke
 - Topic0 pins + offline fixtures; no live indexer hard dependency
 - offline `demo:offline` + unit tests
-- MIT, self-hosted, local-only until founder
+- MIT, self-hosted; public GitHub OK; not on npm until founder
 
 ## Out of scope / fences
 
@@ -41,7 +41,7 @@ recv-ingest → … → recv-approval-watch → recv-permit2-watch(stub) → rec
 | **No custody** | Observe + classify + emit. No key hosting. |
 | **No Soft\*** | Forbidden. |
 | **No Polar / checkout URLs** | None. |
-| **No public/npm until founder** | Private local scaffold only. |
+| **No npm / Polar until founder** | Public GitHub OK. No `npm publish`, no Polar/checkout until LaunchGate + founder GO. |
 | **No Revoke.cash / dashboard clone** | Machine codes + hooks, not a portfolio UX. |
 | **No Safe / SaaS / mainnet SLA** | Charter out. |
 | **LaunchGate-before-expansion** | Live indexer adapters, pager SKUs, auto-revoke need LaunchGate (auto-revoke stays culled). |
