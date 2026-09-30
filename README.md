@@ -2,11 +2,11 @@
 
 More from yellowgram: [OSS tools](https://www.yellowgram.dev/oss).
 
-**Status:** public MIT source · not on npm yet · no Polar
+**Status:** public MIT · npm `recv-approval-watch@0.1.0` · no Polar
 
 Watch `Approval` / `ApprovalForAll` where the agent is **owner** or **spender**; emit machine codes; `clearanceFromWatch` fail-closed. Optional revoke-intent emitter that **NEVER signs**. One job — not a Permit2-watch product.
 
-> **Charter:** [CHARTER.md](./CHARTER.md) — no Soft\* · no Polar/checkout · no custody · not published to npm
+> **Charter:** [CHARTER.md](./CHARTER.md) — no Soft\* · no Polar/checkout · no custody
 
 ```bash
 npm install && npm test && npm run demo:offline
