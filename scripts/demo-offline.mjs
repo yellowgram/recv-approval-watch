@@ -29,7 +29,6 @@ out("");
 const p = defaultApprovalWatchPolicy();
 p.agentAddresses = new Set([AGENT]);
 p.expectedSpendersWhenOwner = new Set([SPENDER_OK]);
-p.permit2WatchStub = true;
 
 const r1 = evaluateApprovalWatch(p, {
   kind: "Approval",
@@ -68,7 +67,7 @@ const r5 = evaluateApprovalWatch(p, {
   owner: AGENT,
   spender: SPENDER_BAD,
 });
-out(`5 permit2 stub → hit=${r5.hit} code=${r5.code}`);
+out(`5 Permit2Allowance default-off → hit=${r5.hit} code=${r5.code}`);
 
 const intent = emitRevokeIntent({
   kind: "Approval",

@@ -26,7 +26,10 @@ export interface ApprovalWatchPolicy {
   expectedSpendersWhenOwner: Set<string>;
   /** Expected owners when agent is spender. Empty = any owner unexpected for inbound authority. */
   expectedOwnersWhenSpender: Set<string>;
-  /** Minimal permit2-watch stub enabled. */
+  /**
+   * Opt-in only (default false). When true, classify Permit2Allowance events.
+   * Out of P0 lead story — this package is not a finished Permit2-watch product.
+   */
   permit2WatchStub: boolean;
   /**
    * Opt-in: allow unlimited ERC-20 value (2^256-1) when counterparty is on the expected set.
@@ -92,7 +95,7 @@ export function defaultApprovalWatchPolicy(): ApprovalWatchPolicy {
     agentAddresses: new Set(),
     expectedSpendersWhenOwner: new Set(),
     expectedOwnersWhenSpender: new Set(),
-    permit2WatchStub: true,
+    permit2WatchStub: false,
     allowUnlimitedWhenExpected: false,
     allowApprovalForAllWhenExpected: false,
     alertOnApprovalForAllClear: false,

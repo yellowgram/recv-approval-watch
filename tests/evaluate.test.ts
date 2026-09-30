@@ -23,7 +23,6 @@ function policy() {
   p.agentAddresses = new Set([AGENT]);
   p.expectedSpendersWhenOwner = new Set([SPENDER_OK]);
   p.expectedOwnersWhenSpender = new Set();
-  p.permit2WatchStub = true;
   return p;
 }
 
@@ -84,8 +83,21 @@ describe("evaluateApprovalWatch", () => {
     expect(r.hit).toBe(false);
   });
 
-  it("permit2 stub watch", () => {
+  it("Permit2Allowance ignored by default (out of P0)", () => {
     const r = evaluateApprovalWatch(policy(), {
+      kind: "Permit2Allowance",
+      owner: AGENT,
+      spender: SPENDER_BAD,
+      token: "0xcccccccccccccccccccccccccccccccccccccccc",
+    });
+    expect(r.hit).toBe(false);
+    expect(r.code).toBe("expected_ok");
+  });
+
+  it("permit2WatchStub opt-in → permit2_slot_unexpected", () => {
+    const p = policy();
+    p.permit2WatchStub = true;
+    const r = evaluateApprovalWatch(p, {
       kind: "Permit2Allowance",
       owner: AGENT,
       spender: SPENDER_BAD,
@@ -93,6 +105,10 @@ describe("evaluateApprovalWatch", () => {
     });
     expect(r.hit).toBe(true);
     expect(r.code).toBe("permit2_slot_unexpected");
+  });
+
+  it("default policy permit2WatchStub === false", () => {
+    expect(defaultApprovalWatchPolicy().permit2WatchStub).toBe(false);
   });
 
   it("revoke intent never signs", () => {
@@ -298,7 +314,7 @@ describe("docs honesty lines (DC1/DC2/DC4/DC8/DC10/DC11/DC13)", () => {
       "An expected spender does not allow unlimited ERC-20 allowance or ApprovalForAll(true). Those stay unexpected unless an explicit opt-in flag is set (default off)."
     );
     expect(readme).toContain(
-      "The Permit2 path is a minimal stub. ERC-20 Approval watch is Approval-blind to Permit2 standing allowances; full Permit2 watch is priced-with / later, not claimed here."
+      "Permit2 standing allowances are out of P0. Default evaluate ignores Permit2Allowance (permit2WatchStub defaults false). This package is not a Permit2-watch product."
     );
     expect(readme).toContain(
       "P0 is offline classify + fixtures. Live indexer adapters need a later LaunchGate."

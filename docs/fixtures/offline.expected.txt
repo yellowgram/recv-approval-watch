@@ -5,7 +5,7 @@ no keys · no signing · no auto-revoke · machine codes only
 2 expected spender → hit=false code=expected_ok
 3 ApprovalForAll → hit=true code=unexpected_approval_for_all
 4 agent as spender → hit=true code=unexpected_approval
-5 permit2 stub → hit=true code=permit2_slot_unexpected
+5 Permit2Allowance default-off → hit=false code=expected_ok
 6 revoke-intent → signed=false code=revoke_intent_emitted
 7 expected+unlimited → hit=true code=unexpected_approval
 8 expected+ApprovalForAll(true) → hit=true code=unexpected_approval_for_all

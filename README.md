@@ -4,13 +4,15 @@ More from yellowgram: [OSS tools](https://www.yellowgram.dev/oss).
 
 **Status:** public MIT source · not on npm yet · no Polar
 
-Watch `Approval` / `ApprovalForAll` where the agent is **owner** or **spender**; emit `unexpected_approval`. Priced-with: minimal Permit2-watch stub. Optional revoke-intent emitter that **NEVER signs**.
+Watch `Approval` / `ApprovalForAll` where the agent is **owner** or **spender**; emit machine codes; `clearanceFromWatch` fail-closed. Optional revoke-intent emitter that **NEVER signs**. One job — not a Permit2-watch product.
 
 > **Charter:** [CHARTER.md](./CHARTER.md) — no Soft\* · no Polar/checkout · no custody · not published to npm
 
 ```bash
 npm install && npm test && npm run demo:offline
 ```
+
+See [docs/DEMO.md](./docs/DEMO.md) for the sealed offline fixture walkthrough.
 
 ## Honesty (locked)
 
@@ -22,7 +24,7 @@ Degraded approval watch does not silently clear spend. Clearance is fail-closed 
 
 An expected spender does not allow unlimited ERC-20 allowance or ApprovalForAll(true). Those stay unexpected unless an explicit opt-in flag is set (default off).
 
-The Permit2 path is a minimal stub. ERC-20 Approval watch is Approval-blind to Permit2 standing allowances; full Permit2 watch is priced-with / later, not claimed here.
+Permit2 standing allowances are out of P0. Default evaluate ignores Permit2Allowance (permit2WatchStub defaults false). This package is not a Permit2-watch product.
 
 P0 is offline classify + fixtures. Live indexer adapters need a later LaunchGate.
 
@@ -30,20 +32,21 @@ recv-approval-watch is emit-only. Quarantine and spend-clearance fail-closed wir
 
 ## Codes (P0)
 
-Closed set:
+Closed set for the one-job path:
 
 | Code | Meaning |
 | --- | --- |
 | `unexpected_approval` | Approval involving agent outside expect policy (or unlimited on expected without opt-in) |
 | `unexpected_approval_for_all` | ApprovalForAll(true) involving agent outside expect (or on expected without opt-in) |
-| `permit2_slot_unexpected` | minimal permit2-watch stub hit |
 | `revoke_intent_emitted` | intent payload produced (never signed; not broadcast proof) |
 | `expected_ok` | no unexpected grant / clear / disabled / unrelated |
 | `approval_watch_degraded` | watch/store unhealthy — fail-closed spend clearance (`clearanceFromWatch`) |
 
+Opt-in only (default **off**, out of P0 lead story): `permit2_slot_unexpected` when `permit2WatchStub: true`.
+
 ## Topic0 pins (ingest)
 
-Callers must supply correctly decoded `Approval` / `ApprovalForAll` / stub Permit2 events (or filter by these topics). Omitting ApprovalForAll in the caller feed is an operator misconfig, not silent safety.
+Callers must supply correctly decoded `Approval` / `ApprovalForAll` events (or filter by these topics). Omitting ApprovalForAll in the caller feed is an operator misconfig, not silent safety.
 
 | Event | topic0 |
 | --- | --- |
@@ -56,7 +59,7 @@ Exported as `TOPIC0_APPROVAL` / `TOPIC0_APPROVAL_FOR_ALL`.
 
 - `defaultApprovalWatchPolicy().enabled === true`. When `enabled: false`, the gate does not classify — do not present disabled examples as a protected agent path.
 - `ApprovalForAll(approved: false)` defaults to `expected_ok` (clear is not an unexpected grant). Set `alertOnApprovalForAllClear: true` to alert on clears.
-- Opt-in only (default **false**): `allowUnlimitedWhenExpected`, `allowApprovalForAllWhenExpected`.
+- Opt-in only (default **false**): `allowUnlimitedWhenExpected`, `allowApprovalForAllWhenExpected`, `permit2WatchStub`.
 - Compose clearance: `clearanceFromWatch({ watchHealthy })` — deny with `approval_watch_degraded` when unhealthy. `degradeOpen: true` is opt-in and prints one stderr line containing `approval_watch_degraded`.
 
 ## Compose
@@ -64,10 +67,10 @@ Exported as `TOPIC0_APPROVAL` / `TOPIC0_APPROVAL_FOR_ALL`.
 Tandem with `send-approve-bound` (prevent issuing at send vs detect already-issued / inbound here). Do not merge packages.
 
 ```
-recv-ingest → … → recv-approval-watch → recv-permit2-watch(stub) → recv-revoke-intent?(emit only) → recv-quarantine → recv-sweep-brake → …
+recv-ingest → … → recv-approval-watch → recv-revoke-intent?(emit only) → recv-quarantine → recv-sweep-brake → …
 ```
 
-`recv-sweep-brake` is downstream compose after quarantine (slot 5 held — not implemented in this package). Quarantine state lives in compose, not inside `evaluateApprovalWatch`.
+`recv-sweep-brake` is downstream compose after quarantine (not implemented in this package). Quarantine state lives in compose, not inside `evaluateApprovalWatch`. Full Permit2-watch is a separate later surface — not claimed here.
 
 ## License
 

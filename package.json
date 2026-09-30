@@ -1,7 +1,7 @@
 {
   "name": "recv-approval-watch",
   "version": "0.1.0",
-  "description": "Receive-side watch: Approval/ApprovalForAll where agent is owner or spender; emit unexpected_approval. Minimal permit2-watch stub. Revoke-intent emitter NEVER signs.",
+  "description": "Receive-side watch: Approval/ApprovalForAll where agent is owner or spender; emit unexpected_approval; clearanceFromWatch fail-closed. Revoke-intent emitter NEVER signs.",
   "type": "module",
   "main": "./dist/api.js",
   "types": "./dist/api.d.ts",
@@ -15,9 +15,11 @@
     "dist",
     "docs/fixtures/offline.expected.txt",
     "SECURITY.md",
+    "CHANGELOG.md",
     "CHARTER.md",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "docs/DEMO.md"
   ],
   "scripts": {
     "build": "tsc",

@@ -12,6 +12,10 @@ export const TOPIC0_APPROVAL =
 export const TOPIC0_APPROVAL_FOR_ALL =
   "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31";
 
-/** Stub reference only — not full Permit2 coverage (DC10). */
+/**
+ * Out of P0 / not exported from public API.
+ * Opt-in callers who set permit2WatchStub may filter by this topic0 reference;
+ * this package does not claim finished Permit2-watch coverage.
+ */
 export const TOPIC0_PERMIT2_APPROVAL_STUB =
   "0xda9fa7c1b00402c17d0161b249b1ab8bbec047c5a52207b9c112deffd817036b";

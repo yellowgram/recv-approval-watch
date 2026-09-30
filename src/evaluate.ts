@@ -49,7 +49,8 @@ function counterpartyExpected(
 }
 
 /**
- * Classify Approval / ApprovalForAll / Permit2 stub involving agent.
+ * Classify Approval / ApprovalForAll involving agent (P0 one job).
+ * Permit2Allowance only when policy.permit2WatchStub === true (opt-in; out of P0 defaults).
  * Emits machine codes — not a Revoke product.
  * Expected allowlist does not swallow unlimited or ApprovalForAll(true) unless opt-in (DC8).
  * ApprovalForAll(false) defaults to expected_ok (DC9).

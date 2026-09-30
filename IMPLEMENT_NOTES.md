@@ -2,7 +2,7 @@
 
 **As of:** 2026-09-30 (ET)  
 **Against:** `/workspace/recv-approval-watch-lg/DESIGN-GATE.md` PASS-with-conditions (DC1–DC19)  
-**Artifact:** `/workspace/recv-approval-watch` (still `"private": true`, no remote, no npm publish)
+**Artifact:** `/workspace/recv-approval-watch` (still `"private": true`; public GitHub OK; no npm publish)
 
 ## What changed vs scaffold
 
@@ -15,7 +15,7 @@
 | Topics | None | `TOPIC0_APPROVAL` / `TOPIC0_APPROVAL_FOR_ALL` pins (DC7/DC15) |
 | Docs | Scaffold codes table | Verbatim honesty lines DC1/DC2/DC4/DC8/DC10/DC11/DC13 in README (+ DC1/DC4 in SECURITY) |
 | Compose | Quarantine FC mentioned | Emit-only locked; sweep-brake downstream mention only (DC13/DC19); no quarantine mutation |
-| package.json | private, no public URLs | Still private; **no** `repository` / `homepage` / `prepublishOnly` |
+| package.json | private | Still private; homepage/OSS URLs present; `files[]` includes CHANGELOG + docs/DEMO.md; no npm publish |
 | Demo | 6 fixture steps | + unlimited, AFA-true-on-expected, AFA-clear, clearance degraded/healthy |
 
 ## DC checklist
@@ -31,7 +31,7 @@
 | DC7 | satisfied | Approval + ApprovalForAll required; topic0 pins in README + `topics.ts` |
 | DC8 | satisfied | Unlimited / AFA(true) not swallowed; opt-in flags default false; verbatim README |
 | DC9 | satisfied | `approved === false` → `expected_ok` unless `alertOnApprovalForAllClear` |
-| DC10 | satisfied | Stub only; verbatim Permit2 honesty in README |
+| DC10 | satisfied (narrowed) | Permit2-watch out of P0 defaults (`permit2WatchStub` false); not exported as lead product; honesty line updated |
 | DC11 | satisfied | Offline classify + fixtures; verbatim live-indexer line in README; no Alchemy/Graph dep |
 | DC12 | satisfied | Machine codes + hooks only; no dashboard/SKU |
 | DC13 | satisfied | Emit-only; verbatim quarantine-compose line in README; no quarantine writes |
@@ -58,3 +58,7 @@ Ban-token-only Soft\* mentions in CHARTER / README / demo / fixture / IMPLEMENT_
 ## DC still open
 
 None of DC1–DC19 are left intentionally open for this P0. Expansion (live indexer adapters, pager SKUs) remains LaunchGate-gated; auto-revoke stays culled. Slot 5 `recv-sweep-brake` remains held (compose mention only).
+
+## DHH close (2026-09-30)
+
+Narrowed one-job export story to Approval/ApprovalForAll classify + codes + `clearanceFromWatch` fail-closed. Kept revoke-intent as unsigned emit (charter-core; never signs). Demoted Permit2-watch: `permit2WatchStub` defaults **false**, removed `TOPIC0_PERMIT2_APPROVAL_STUB` from public `api.ts` exports, README lead no longer sells a Permit2 stub product. Packaging: `CHANGELOG.md` + `docs/DEMO.md` in `files[]`. Soft\* ban-token only. Still **not** ready-for-npm (LaunchGate + founder GO out of this audit).

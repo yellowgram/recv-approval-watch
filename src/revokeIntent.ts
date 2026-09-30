@@ -2,7 +2,8 @@ import type { ApprovalEvent, RevokeIntent } from "./types.js";
 
 /**
  * Emit a revoke-intent payload for operator/wallet to sign.
- * NEVER signs. NEVER broadcasts. signed is always false.
+ * Charter-core: NEVER signs. NEVER broadcasts. signed is always false.
+ * Not a Revoke.cash product — unsigned tip only.
  */
 export function emitRevokeIntent(ev: ApprovalEvent): RevokeIntent {
   let kind: RevokeIntent["kind"] = "erc20_approve_zero";

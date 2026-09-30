@@ -18,5 +18,4 @@ export { clearanceFromWatch } from "./clearance.js";
 export {
   TOPIC0_APPROVAL,
   TOPIC0_APPROVAL_FOR_ALL,
-  TOPIC0_PERMIT2_APPROVAL_STUB,
 } from "./topics.js";
