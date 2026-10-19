@@ -75,3 +75,7 @@ recv-ingest → … → recv-approval-watch → recv-revoke-intent?(emit only) �
 ## License
 
 MIT — [LICENSE](./LICENSE).
+
+---
+
+Part of yellowgram open source tools: https://www.yellowgram.dev/oss
