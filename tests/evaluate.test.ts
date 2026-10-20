@@ -83,7 +83,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.hit).toBe(false);
   });
 
-  it("Permit2Allowance ignored by default (out of v0.1)", () => {
+  it("Permit2Allowance ignored by default", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "Permit2Allowance",
       owner: AGENT,

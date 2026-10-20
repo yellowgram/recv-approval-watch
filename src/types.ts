@@ -56,7 +56,7 @@ export interface ApprovalWatchResult {
 }
 
 export interface RevokeIntent {
-  /** Sealed intent payload for operator/wallet — NEVER signed by this package. */
+  /** Unsigned intent payload for operator/wallet — NEVER signed by this package. */
   kind: "erc20_approve_zero" | "setApprovalForAll_false" | "permit2_lockdown_stub";
   owner: string;
   spender: string;

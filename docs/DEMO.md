@@ -11,7 +11,7 @@ npm run demo:offline
 
 `demo:offline` exits non-zero if stdout drifts from [`fixtures/offline.expected.txt`](./fixtures/offline.expected.txt).
 
-What it shows (sealed allow **and** deny-style codes):
+What it shows (fixed fixtures: allow **and** deny-style codes):
 
 1. Unexpected Approval (agent owner) → `unexpected_approval`
 2. Expected spender (finite) → `expected_ok`
