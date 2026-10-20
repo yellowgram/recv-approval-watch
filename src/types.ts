@@ -28,22 +28,22 @@ export interface ApprovalWatchPolicy {
   expectedOwnersWhenSpender: Set<string>;
   /**
    * Opt-in only (default false). When true, classify Permit2Allowance events.
-   * Out of P0 lead story — this package is not a finished Permit2-watch product.
+   * Out of lead story — this package is not a finished Permit2-watch product.
    */
   permit2WatchStub: boolean;
   /**
    * Opt-in: allow unlimited ERC-20 value (2^256-1) when counterparty is on the expected set.
-   * Default false — expected allowlist must not swallow unlimited (DC8).
+   * Default false — expected allowlist must not swallow unlimited.
    */
   allowUnlimitedWhenExpected: boolean;
   /**
    * Opt-in: allow ApprovalForAll(true) when operator is on the expected set.
-   * Default false — expected allowlist must not swallow operator-wide grants (DC8).
+   * Default false — expected allowlist must not swallow operator-wide grants.
    */
   allowApprovalForAllWhenExpected: boolean;
   /**
    * When true, ApprovalForAll(approved:false) still alerts. Default false:
-   * clear events are expected_ok (DC9).
+   * clear events are expected_ok.
    */
   alertOnApprovalForAllClear: boolean;
 }
@@ -66,7 +66,7 @@ export interface RevokeIntent {
   code: "revoke_intent_emitted";
 }
 
-/** Spend-clearance decision from watch health (compose helper, DC4). */
+/** Spend-clearance decision from watch health (compose helper, ). */
 export type ClearanceDecision = "allow" | "deny";
 
 export interface ClearanceFromWatchInput {
@@ -75,7 +75,7 @@ export interface ClearanceFromWatchInput {
   /**
    * Opt-in degrade-open (default false). When armed and watch is unhealthy,
    * prints one stderr line containing `approval_watch_degraded` and allows.
-   * Default off = fail-closed (DC5).
+   * Default off = fail-closed.
    */
   degradeOpen?: boolean;
 }
@@ -86,7 +86,7 @@ export interface ClearanceFromWatchResult {
   reason?: string;
 }
 
-/** ERC-20 uint256 max — unlimited allowance sentinel (DC8). */
+/** ERC-20 uint256 max — unlimited allowance sentinel. */
 export const UNLIMITED_ALLOWANCE = (1n << 256n) - 1n;
 
 export function defaultApprovalWatchPolicy(): ApprovalWatchPolicy {

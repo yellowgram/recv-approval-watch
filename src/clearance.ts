@@ -4,10 +4,10 @@ import type {
 } from "./types.js";
 
 /**
- * Compose clearance helper (DC4/DC5).
+ * Compose clearance helper.
  * When watchHealthy !== true, spend clearance is fail-closed with
  * `approval_watch_degraded` unless degradeOpen is explicitly armed (default off).
- * This package does not write quarantine state — compose wires FC (DC13).
+ * This package does not write quarantine state — compose wires FC.
  */
 export function clearanceFromWatch(
   input: ClearanceFromWatchInput

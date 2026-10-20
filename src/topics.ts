@@ -1,7 +1,7 @@
 /**
  * Pinned event topic0 values (keccak of canonical signatures).
  * Callers must supply correctly decoded events (or filter logs by these topics).
- * Omitting ApprovalForAll in the caller feed is an operator misconfig, not silent safety (DC7/DC15).
+ * Omitting ApprovalForAll in the caller feed is an operator misconfig, not silent safety.
  */
 
 /** Approval(address,address,uint256) */
@@ -13,7 +13,7 @@ export const TOPIC0_APPROVAL_FOR_ALL =
   "0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31";
 
 /**
- * Out of P0 / not exported from public API.
+ * Out of / not exported from public API.
  * Opt-in callers who set permit2WatchStub may filter by this topic0 reference;
  * this package does not claim finished Permit2-watch coverage.
  */

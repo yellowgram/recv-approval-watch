@@ -1,7 +1,7 @@
 {
   "name": "recv-approval-watch",
-  "version": "0.1.0",
-  "description": "Receive-side watch: Approval/ApprovalForAll where agent is owner or spender; emit unexpected_approval; clearanceFromWatch fail-closed. Revoke-intent emitter NEVER signs.",
+  "version": "0.2.0",
+  "description": "Deprecated: merged into l2-send-guard 1.x. This package still works but gets no fixes. See https://github.com/yellowgram/l2-safety-proxy#migrating",
   "type": "module",
   "main": "./dist/api.js",
   "types": "./dist/api.d.ts",
@@ -16,7 +16,6 @@
     "docs/fixtures/offline.expected.txt",
     "SECURITY.md",
     "CHANGELOG.md",
-    "CHARTER.md",
     "LICENSE",
     "README.md",
     "docs/DEMO.md"
@@ -35,7 +34,8 @@
     "approval",
     "receive",
     "agent",
-    "fail-closed"
+    "fail-closed",
+    "deprecated"
   ],
   "license": "MIT",
   "author": {

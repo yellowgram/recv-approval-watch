@@ -49,11 +49,11 @@ function counterpartyExpected(
 }
 
 /**
- * Classify Approval / ApprovalForAll involving agent (P0 one job).
- * Permit2Allowance only when policy.permit2WatchStub === true (opt-in; out of P0 defaults).
+ * Classify Approval / ApprovalForAll involving agent (one job).
+ * Permit2Allowance only when policy.permit2WatchStub === true (opt-in; out of defaults).
  * Emits machine codes — not a Revoke product.
- * Expected allowlist does not swallow unlimited or ApprovalForAll(true) unless opt-in (DC8).
- * ApprovalForAll(false) defaults to expected_ok (DC9).
+ * Expected allowlist does not swallow unlimited or ApprovalForAll(true) unless opt-in.
+ * ApprovalForAll(false) defaults to expected_ok.
  */
 export function evaluateApprovalWatch(
   policy: ApprovalWatchPolicy,
@@ -83,7 +83,7 @@ export function evaluateApprovalWatch(
   const owner = norm(ev.owner);
   const spender = norm(ev.spender);
 
-  // DC9: ApprovalForAll clear (approved === false) is not an unexpected grant by default.
+  // ApprovalForAll clear (approved === false) is not an unexpected grant by default.
   if (ev.kind === "ApprovalForAll" && ev.approved === false) {
     if (policy.alertOnApprovalForAllClear === true) {
       return {
@@ -98,7 +98,7 @@ export function evaluateApprovalWatch(
 
   const expected = counterpartyExpected(policy, role, owner, spender);
 
-  // DC8: unlimited ERC-20 on expected set stays unexpected unless allowUnlimitedWhenExpected.
+  // unlimited ERC-20 on expected set stays unexpected unless allowUnlimitedWhenExpected.
   if (
     ev.kind === "Approval" &&
     expected &&
@@ -116,7 +116,7 @@ export function evaluateApprovalWatch(
     };
   }
 
-  // DC8: ApprovalForAll(true) on expected set stays unexpected unless allowApprovalForAllWhenExpected.
+  // ApprovalForAll(true) on expected set stays unexpected unless allowApprovalForAllWhenExpected.
   if (
     ev.kind === "ApprovalForAll" &&
     ev.approved === true &&

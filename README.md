@@ -1,81 +1,30 @@
-# recv-approval-watch
+# recv-approval-watch (deprecated)
 
-More from yellowgram: [OSS tools](https://www.yellowgram.dev/oss).
+**This package is merged into [`l2-send-guard`](https://github.com/yellowgram/l2-safety-proxy) 1.x and gets no more fixes.**
+Version 0.2.0 behaves exactly like 0.1.0 and prints one deprecation warning when imported.
 
-**Status:** public MIT · npm `recv-approval-watch@0.1.0` · no Polar
+## Why
 
-Watch `Approval` / `ApprovalForAll` where the agent is **owner** or **spender**; emit machine codes; `clearanceFromWatch` fail-closed. Optional revoke-intent emitter that **NEVER signs**. One job — not a Permit2-watch product.
+recv-approval-watch did one slice of a bigger job (watching approvals the agent grants). On its own it had gaps that a single tool closes better:
 
-> **Charter:** [CHARTER.md](./CHARTER.md) — no Soft\* · no Polar/checkout · no custody
+- Permit2 approvals were only watched behind an opt-in stub flag.
+- An unexpected approval was reported but didn't stop the agent's next send.
+- It needed its own log ingestion; there was no watcher with a saved cursor.
 
-```bash
-npm install && npm test && npm run demo:offline
+`l2-send-guard` 1.x checks every call inside a transaction against one policy file, gates EIP-7702
+delegations, keeps rolling caps and idempotency keys in a persistent store, watches what arrives, and
+ships a guarded signer that makes the policy binding for whoever holds the key.
+
+## Migrating
+
+```sh
+npm uninstall recv-approval-watch
+npm install l2-send-guard
 ```
 
-See [docs/DEMO.md](./docs/DEMO.md) for the sealed offline fixture walkthrough.
-
-## Honesty (locked)
-
-This package never signs and never auto-revokes. Revoke-intent is an unsigned payload for the operator or wallet.
-
-revoke_intent_emitted is not proof a revoke was broadcast or mined.
-
-Degraded approval watch does not silently clear spend. Clearance is fail-closed while the watch is unhealthy.
-
-An expected spender does not allow unlimited ERC-20 allowance or ApprovalForAll(true). Those stay unexpected unless an explicit opt-in flag is set (default off).
-
-Permit2 standing allowances are out of P0. Default evaluate ignores Permit2Allowance (permit2WatchStub defaults false). This package is not a Permit2-watch product.
-
-P0 is offline classify + fixtures. Live indexer adapters need a later LaunchGate.
-
-recv-approval-watch is emit-only. Quarantine and spend-clearance fail-closed wiring live in compose (with DC4 helper), not as hidden side effects inside evaluate.
-
-## Codes (P0)
-
-Closed set for the one-job path:
-
-| Code | Meaning |
-| --- | --- |
-| `unexpected_approval` | Approval involving agent outside expect policy (or unlimited on expected without opt-in) |
-| `unexpected_approval_for_all` | ApprovalForAll(true) involving agent outside expect (or on expected without opt-in) |
-| `revoke_intent_emitted` | intent payload produced (never signed; not broadcast proof) |
-| `expected_ok` | no unexpected grant / clear / disabled / unrelated |
-| `approval_watch_degraded` | watch/store unhealthy — fail-closed spend clearance (`clearanceFromWatch`) |
-
-Opt-in only (default **off**, out of P0 lead story): `permit2_slot_unexpected` when `permit2WatchStub: true`.
-
-## Topic0 pins (ingest)
-
-Callers must supply correctly decoded `Approval` / `ApprovalForAll` events (or filter by these topics). Omitting ApprovalForAll in the caller feed is an operator misconfig, not silent safety.
-
-| Event | topic0 |
-| --- | --- |
-| `Approval(address,address,uint256)` | `0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925` |
-| `ApprovalForAll(address,address,bool)` | `0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31` |
-
-Exported as `TOPIC0_APPROVAL` / `TOPIC0_APPROVAL_FOR_ALL`.
-
-## Policy notes
-
-- `defaultApprovalWatchPolicy().enabled === true`. When `enabled: false`, the gate does not classify — do not present disabled examples as a protected agent path.
-- `ApprovalForAll(approved: false)` defaults to `expected_ok` (clear is not an unexpected grant). Set `alertOnApprovalForAllClear: true` to alert on clears.
-- Opt-in only (default **false**): `allowUnlimitedWhenExpected`, `allowApprovalForAllWhenExpected`, `permit2WatchStub`.
-- Compose clearance: `clearanceFromWatch({ watchHealthy })` — deny with `approval_watch_degraded` when unhealthy. `degradeOpen: true` is opt-in and prints one stderr line containing `approval_watch_degraded`.
-
-## Compose
-
-Tandem with `send-approve-bound` (prevent issuing at send vs detect already-issued / inbound here). Do not merge packages.
-
-```
-recv-ingest → … → recv-approval-watch → recv-revoke-intent?(emit only) → recv-quarantine → recv-sweep-brake → …
-```
-
-`recv-sweep-brake` is downstream compose after quarantine (not implemented in this package). Quarantine state lives in compose, not inside `evaluateApprovalWatch`. Full Permit2-watch is a separate later surface — not claimed here.
+What you used here is now `L2SG_WATCH_AGENTS` on the proxy, or `watchInbound` / `scanOnce` imported from `l2-send-guard` (findings of kind `approval`, with unsigned revoke calldata). An unexpected approval locks the agent's sends (`-32088`) until you run `l2-send-guard unlock`.
+The full guide is at https://github.com/yellowgram/l2-safety-proxy#migrating.
 
 ## License
 
-MIT — [LICENSE](./LICENSE).
-
----
-
-Part of yellowgram open source tools: https://www.yellowgram.dev/oss
+MIT

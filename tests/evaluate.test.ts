@@ -83,7 +83,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.hit).toBe(false);
   });
 
-  it("Permit2Allowance ignored by default (out of P0)", () => {
+  it("Permit2Allowance ignored by default (out of v0.1)", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "Permit2Allowance",
       owner: AGENT,
@@ -141,7 +141,7 @@ describe("evaluateApprovalWatch", () => {
     expect(defaultApprovalWatchPolicy().enabled).toBe(true);
   });
 
-  // DC8: expected spender + unlimited → hit unexpected
+  // expected spender + unlimited → hit unexpected
   it("expected spender + unlimited value → unexpected_approval", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "Approval",
@@ -154,7 +154,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.role).toBe("owner");
   });
 
-  // DC8: expected operator + ApprovalForAll(true) → hit
+  // expected operator + ApprovalForAll(true) → hit
   it("expected operator + ApprovalForAll(true) → unexpected_approval_for_all", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "ApprovalForAll",
@@ -166,7 +166,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.code).toBe("unexpected_approval_for_all");
   });
 
-  // DC8 opt-in for unlimited
+  //  opt-in for unlimited
   it("allowUnlimitedWhenExpected opt-in → expected_ok for unlimited", () => {
     const p = policy();
     p.allowUnlimitedWhenExpected = true;
@@ -180,7 +180,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.code).toBe("expected_ok");
   });
 
-  // DC8 opt-in for ApprovalForAll
+  //  opt-in for ApprovalForAll
   it("allowApprovalForAllWhenExpected opt-in → expected_ok", () => {
     const p = policy();
     p.allowApprovalForAllWhenExpected = true;
@@ -194,7 +194,7 @@ describe("evaluateApprovalWatch", () => {
     expect(r.code).toBe("expected_ok");
   });
 
-  // DC9: ApprovalForAll(false) → expected_ok by default
+  // ApprovalForAll(false) → expected_ok by default
   it("ApprovalForAll(false) → expected_ok by default", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "ApprovalForAll",
@@ -219,8 +219,8 @@ describe("evaluateApprovalWatch", () => {
     expect(r.code).toBe("unexpected_approval_for_all");
   });
 
-  // DC6: agent as spender still hits (also covered above; keep explicit)
-  it("agent as spender still hits (DC6)", () => {
+  // agent as spender still hits (also covered above; keep explicit)
+  it("agent as spender still hits", () => {
     const r = evaluateApprovalWatch(policy(), {
       kind: "Approval",
       owner: OWNER_OTHER,
@@ -248,7 +248,7 @@ describe("evaluateApprovalWatch", () => {
   });
 });
 
-describe("clearanceFromWatch (DC4/DC5)", () => {
+describe("clearanceFromWatch", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -281,7 +281,7 @@ describe("clearanceFromWatch (DC4/DC5)", () => {
   });
 });
 
-describe("topics / ingest (DC7/DC15)", () => {
+describe("topics / ingest", () => {
   it("TOPIC0_APPROVAL pin", () => {
     expect(TOPIC0_APPROVAL).toBe(
       "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
@@ -295,61 +295,17 @@ describe("topics / ingest (DC7/DC15)", () => {
   });
 });
 
-describe("docs honesty lines (DC1/DC2/DC4/DC8/DC10/DC11/DC13)", () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-  const readme = readFileSync(join(root, "README.md"), "utf8");
-  const security = readFileSync(join(root, "SECURITY.md"), "utf8");
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-  it("README verbatim honesty lines", () => {
-    expect(readme).toContain(
-      "This package never signs and never auto-revokes. Revoke-intent is an unsigned payload for the operator or wallet."
-    );
-    expect(readme).toContain(
-      "revoke_intent_emitted is not proof a revoke was broadcast or mined."
-    );
-    expect(readme).toContain(
-      "Degraded approval watch does not silently clear spend. Clearance is fail-closed while the watch is unhealthy."
-    );
-    expect(readme).toContain(
-      "An expected spender does not allow unlimited ERC-20 allowance or ApprovalForAll(true). Those stay unexpected unless an explicit opt-in flag is set (default off)."
-    );
-    expect(readme).toContain(
-      "Permit2 standing allowances are out of P0. Default evaluate ignores Permit2Allowance (permit2WatchStub defaults false). This package is not a Permit2-watch product."
-    );
-    expect(readme).toContain(
-      "P0 is offline classify + fixtures. Live indexer adapters need a later LaunchGate."
-    );
-    expect(readme).toContain(
-      "recv-approval-watch is emit-only. Quarantine and spend-clearance fail-closed wiring live in compose (with DC4 helper), not as hidden side effects inside evaluate."
-    );
+describe("deprecation", () => {
+  it("README says the package is deprecated and points to l2-send-guard", () => {
+    const text = readFileSync(join(root, "README.md"), "utf8");
+    expect(text).toContain("(deprecated)");
+    expect(text).toContain("l2-send-guard");
   });
-
-  it("SECURITY verbatim DC1 and DC4 lines", () => {
-    expect(security).toContain(
-      "This package never signs and never auto-revokes. Revoke-intent is an unsigned payload for the operator or wallet."
-    );
-    expect(security).toContain(
-      "Degraded approval watch does not silently clear spend. Clearance is fail-closed while the watch is unhealthy."
-    );
-  });
-
-  it("package private fences", () => {
-    const pkg = JSON.parse(
-      readFileSync(join(root, "package.json"), "utf8")
-    ) as Record<string, unknown>;
-    expect(pkg.private).toBeUndefined();
-    expect(pkg.repository).toEqual({
-      type: "git",
-      url: "git+https://github.com/yellowgram/recv-approval-watch.git",
-    });
-    expect(pkg.homepage).toBe("https://www.yellowgram.dev/oss");
-    expect(pkg.bugs).toEqual({
-      url: "https://github.com/yellowgram/recv-approval-watch/issues",
-    });
-    expect(pkg.prepublishOnly).toBeUndefined();
-    expect(
-      (pkg.scripts as Record<string, unknown> | undefined)?.prepublishOnly
-    ).toBeUndefined();
-    expect(PACKAGE_VERSION).toBe("0.1.0");
+  it("version is 0.2.0 in package.json and PACKAGE_VERSION", () => {
+    const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+    expect(pkg.version).toBe("0.2.0");
+    expect(PACKAGE_VERSION).toBe("0.2.0");
   });
 });

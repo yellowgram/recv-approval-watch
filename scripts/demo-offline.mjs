@@ -107,7 +107,7 @@ const c11 = clearanceFromWatch({ watchHealthy: true });
 out(`11 clearance healthy → decision=${c11.decision} code=${c11.code}`);
 
 out("");
-out("charter: no Soft* · no Polar · no custody · LaunchGate-before-expansion");
+out("deprecated: use l2-send-guard 1.x · this package holds no keys");
 out("compose: emit-only → quarantine/clearance FC external · sweep-brake downstream only");
 
 const expected = readFileSync(EXPECTED, "utf8").replace(/\r\n/g, "\n").trimEnd();
